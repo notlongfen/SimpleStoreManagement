@@ -3,7 +3,7 @@ package Service;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-
+import java.util.Scanner;
 import entities.DailyProduct;
 import entities.LongLifeProduct;
 import entities.Product;
@@ -11,6 +11,7 @@ import entities.WareHouse;
 import manage.ProductManagement;
 import manage.WareHouseManagement;
 import report.Report;
+import utils.FileManager;
 import utils.Validation;
 
 public class Service implements IService {
@@ -19,6 +20,7 @@ public class Service implements IService {
     List<Product> listProduct = productManagement.getListProduct();
     WareHouseManagement wareHouseManagement = new WareHouseManagement();
     Report report = new Report();
+    FileManager fm = new FileManager();
     private static int lastGeneratedCode = 0;
 
     public Product inputProduct(Status status){
@@ -36,6 +38,7 @@ public class Service implements IService {
             String expirationDate = valid.checkAfterDate("Expiration Date: ", manufacturingDate, status);
             newProduct = new LongLifeProduct(code, name, manufacturingDate, expirationDate, quantity, type);
         }
+        fm.saveToFile("product.dat", newProduct);
         return newProduct;
     }
     @Override
@@ -107,7 +110,7 @@ public class Service implements IService {
         }else{
             code = "E" + selfIncrementCode();
         }
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
         LocalDateTime now = LocalDateTime.now();
         String time = dtf.format(now); 
         List<Product> productList = productManagement.getListProduct();

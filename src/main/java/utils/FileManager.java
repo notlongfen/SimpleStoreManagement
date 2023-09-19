@@ -3,9 +3,10 @@ package utils;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import entities.Product;
 public class FileManager implements IFileManager{
     @Override
-    public void saveToFile(String path, List data) {
+    public void saveToFile(String path, Product data) {
         try {
             FileOutputStream fos = new FileOutputStream(path);
             ObjectOutputStream oos = new ObjectOutputStream(fos);
@@ -18,7 +19,7 @@ public class FileManager implements IFileManager{
     }
 
     @Override
-    public List<String> loadData(String path) {
+    public List<String> loadData(String path) { //to program(deseralize)
         List<String> data = new ArrayList<>();
         try {
             FileInputStream fis = new FileInputStream(path);

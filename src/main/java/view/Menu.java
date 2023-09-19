@@ -1,11 +1,15 @@
 package view;
 
 import Service.Service;
+import Service.Status;
+import java.io.IOException;
+import java.util.InputMismatchException;
 import utils.Validation;
-
+import java.util.Scanner;
 public class Menu { //Call to service to do all the function and switch case to choose the function
     Service service = new Service();
     Validation validation = new Validation();
+    Scanner sc = new Scanner(System.in);
     public void execute(){
         System.out.println("Welcome to the Store Management System");
         System.out.println("Represent to you by Phan Nguyen Hoang Long SE185083 ");
@@ -23,7 +27,18 @@ public class Menu { //Call to service to do all the function and switch case to 
         System.out.println("10. Display product running out");
         // System.out.println("11. Display receipt product");
         System.out.println("11. Exit");
-        int option = validation.checkInt("Please choose the function you want to use: ", 1, 8, null);
+        int option = validation.checkInt("Please choose the function you want to use: ", 1, 11, Status.NONE);
+//        int option = 0 ;
+//        try {
+//            option = sc.nextInt();
+//        } catch (InputMismatchException e) {
+//            // Handle the case where the input is not a valid integer
+//            System.err.println("Invalid input. Please enter a valid integer.");
+//            sc.next(); // Consume the invalid input to avoid an infinite loop
+//        }
+        
+
+        while(true){
         switch(option){
             case 1:
                 service.addProduct();
@@ -59,6 +74,7 @@ public class Menu { //Call to service to do all the function and switch case to 
                 System.out.println("Thank you for using our service!");
                 System.exit(0);
                 break;
+            }
         }
     }
 }

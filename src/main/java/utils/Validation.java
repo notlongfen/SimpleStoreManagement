@@ -49,7 +49,7 @@ public class Validation implements IValidation{
             System.out.println(msg);
             // allow user input a string 
             String input_raw = sc.nextLine();
-            if(status.equals(Status.UPDATE) && input_raw.isBlank()){
+            if(status != null && status.equals(Status.UPDATE) && input_raw.isBlank()){
                 return input_raw;
             }
             // input == null or do dai = 0 => rong 
@@ -109,24 +109,24 @@ public class Validation implements IValidation{
 
     @Override
     public String checkBeforeDate(String msg, Status status) {
-        String dateFormat = "MM/dd/yyyy";
+        String dateFormat = "dd/MM/yyyy";
         DateFormat sdf = new SimpleDateFormat(dateFormat);
         sdf.setLenient(false);
         while (true) {
             String dateStr = checkString(msg,status);
             try {
                 sdf.parse(dateStr);
+                return dateStr;
             } catch (ParseException e) {
                 System.err.println("Incorrect date ! Please enter again !");
             }
-            return dateStr;
         }
 
     }
 
     @Override
-    public String checkAfterDate(String msg, String pd, Status status) {
-        String dateFormat = "MM/dd/yyyy";
+    public String checkAfterDate(String msg, String pd, Status status) { //Must check again
+        String dateFormat = "dd/MM/yyyy";
         DateFormat sdf = new SimpleDateFormat(dateFormat);
         sdf.setLenient(false);
         while (true) {
@@ -138,13 +138,17 @@ public class Validation implements IValidation{
                 if (d1.compareTo(d2) < 0) {
                     System.out.println("Expiration date must large than production date ! Please enter again !");
                     continue;
+                }else{
+                    return initDate;
                 }
+//                break;
             } catch (ParseException ex) {
                 System.err.println("Incorrect date ! Please enter again !");
                 continue;
             }
 
         }
+        
     }
 
     @Override
@@ -154,8 +158,8 @@ public class Validation implements IValidation{
             if(type.isBlank()){
                 return type;
             }
-            if((!type.equals("Daily")) || (!type.equals("Long")) ){
-                System.err.println("Must input 1 in 2 type product is 'Daily' or 'Long' ! Please input again !");
+            if((!type.equals("DailyProduct")) && (!type.equals("LongLifeProduct")) ){
+                System.err.println("Must input 1 in 2 type product is 'DailyProduct' or 'LongLifeProduct' ! Please input again !");
                 continue;
             }
             
@@ -169,7 +173,7 @@ public class Validation implements IValidation{
         while(true){
             String type = checkString(msg,status);
             
-            if((!type.equals("Small")) || (!type.equals("Medium")) || (!type.equals("Large"))){
+            if((!type.equals("Small")) && (!type.equals("Medium")) && (!type.equals("Large"))){
                 System.err.println("Must input 1 in 3 size product is 'Small' or 'Medium' or 'Large' ! Please input again !");
                 continue;
             }
@@ -187,7 +191,7 @@ public class Validation implements IValidation{
             
             // allow user input a string 
             String input_raw = checkString(msg,null);
-            if(input_raw.isBlank() && status.equals(Status.UPDATE)){
+            if(input_raw.isBlank() && status != null & status.equals(Status.UPDATE)){
                 return -1;
             }
             try {
